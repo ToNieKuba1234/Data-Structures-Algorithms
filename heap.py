@@ -1,34 +1,60 @@
 #This is a simple python Heap implementation
-# that includes these features:
+# that includes these main features:
 # - constructor()
 # - push()
 # - pop()
+# - heapify()
+# - peek()
 # - display()
+# - utility functions(is_empty(), size(), bubble_up(), bubble_down())
 
 import math
 
 class myHeap():
     def __init__(self, iterable):
-        self.data = []
-
-        for i in iterable:
-            self.data.append(i)
+        self.data = list(iterable)
+        self.heapify()
             
     def push(self, value):  #adds an element to the heap
         self.data.append(value)
         self.bubble_up(len(self.data) - 1)
         
     
-    def pop(self):  #removes the smallest element (biggest in max-heap)
-        if not self.data:
-            raise Exception("Cannot remove an element from an empty list!")
+    def pop(self):  #remove's the smallest element and returns it
+        if self.is_empty():
+            raise Exception("Cannot remove an element from an empty heap!")
 
         removed_val = self.data[0]
 
         self.data[0], self.data[-1] = self.data[-1], self.data[0]
         self.data.pop(-1)
 
-        self.bubble_down(0)
+        if not self.is_empty():  # tylko jeśli po usunięciu nadal są elementy
+            self.bubble_down(0)
+
+        return removed_val
+
+    def heapify(self):  #changes a list so it's a heap (min-heap)
+        if self.is_empty():
+            return
+        
+        last_parent = (self.size() - 2) // 2
+
+        for index in range(last_parent, -1, -1):
+            self.bubble_down(index)
+
+
+    def peek(self):  #returns the smallest element
+        if self.is_empty():
+            raise Exception("Cannot peek into an empty heap!")
+        return self.data[0]
+
+    
+    def size(self):  #returns the heap size
+        return len(self.data)
+    
+    def is_empty(self):
+        return self.size() == 0
 
 
     def bubble_up(self, index):  #keeps the tree heapified (the parent has to be smaller than the children)
@@ -64,16 +90,16 @@ class myHeap():
 
     
     def display(self):  #prints out the tree to the screen
-        if not self.data:
+        if self.is_empty():
             print("(pusty kopiec)")
             return
 
-        levels = math.floor(math.log2(len(self.data))) + 1  #func calculating height of the heap
+        levels = math.floor(math.log2(self.size())) + 1  # korzystamy z size()
         max_width = 2 ** (levels - 1)
 
         index = 0
         for level in range(levels):
-            count = min(2 ** level, len(self.data) - index)
+            count = min(2 ** level, self.size() - index)
 
             spaces = max_width // (2 ** level)
             line = " " * (spaces // 2)
@@ -82,7 +108,7 @@ class myHeap():
                 line += f"{self.data[index]:^3}" + " " * spaces
                 index += 1
 
-            print(line.rstrip()) 
+            print(line.rstrip())
         print()
 
 
@@ -101,4 +127,3 @@ if __name__ == "__main__":
 
     #siplaying the heap
     myHeap.display()
-
