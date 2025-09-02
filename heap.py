@@ -13,10 +13,11 @@ class myHeap():
 
         for i in iterable:
             self.data.append(i)
-
+            
     def push(self, value):  #adds an element to the heap
         self.data.append(value)
         self.bubble_up(len(self.data) - 1)
+        
     
     def pop(self):  #removes the smallest element (biggest in max-heap)
         if not self.data:
@@ -38,6 +39,7 @@ class myHeap():
                 index = parent
             else:
                 break
+
     
     def bubble_down(self, index):  #keeps the tree heapified (the parent has to be smaller than the children)
         length = len(self.data)
@@ -56,9 +58,10 @@ class myHeap():
             if smallest == index:
                 break
 
-
+            
             self.data[index], self.data[smallest] = self.data[smallest], self.data[index]
             index = smallest
+
     
     def display(self):  #prints out the tree to the screen
         if not self.data:
@@ -82,14 +85,20 @@ class myHeap():
             print(line.rstrip()) 
         print()
 
+
 #makes this run only if the script is runned by python heap.py
 if __name__ == "__main__":
+    #initializing the heap
     myHeap = myHeap([1, 2])
 
+    #adding elements to the heap
     myHeap.push(5)
     myHeap.push(3)
     myHeap.push(8)
 
+    #removing an element from the heap
     myHeap.pop()
 
+    #siplaying the heap
     myHeap.display()
+
